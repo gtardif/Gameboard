@@ -24,7 +24,7 @@ public class ServerMain extends GuiceServletContextListener {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Server server = new Server(8080);
+		Server server = new Server(getPort());
 
 		WebAppContext webappContext = new WebAppContext("src/main/webapp", "/");
 		webappContext.setParentLoaderPriority(true);
@@ -32,5 +32,13 @@ public class ServerMain extends GuiceServletContextListener {
 
 		server.start();
 		server.join();
+	}
+
+	private static int getPort() {
+		try {
+			return Integer.valueOf(System.getenv("PORT"));
+		} catch (Exception e) {
+			return 8080;
+		}
 	}
 }
