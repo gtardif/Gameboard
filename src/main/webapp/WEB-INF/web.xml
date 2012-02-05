@@ -11,10 +11,17 @@
 		<filter-name>guiceFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<servlet>
+		<servlet-name>chatServlet</servlet-name>
+		<servlet-class>gtardif.ChatServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>chatServlet</servlet-name>
+		<url-pattern>/chat</url-pattern>
+	</servlet-mapping>
 
 	<listener>
 		<listener-class>gtardif.ServerMain</listener-class>
 	</listener>
-
-	
 </web-app>
