@@ -1,1 +1,1 @@
-web:    java -cp target/classes:target/dependency/* gtardif.Servlet
+web:    java -cp target/classes:target/dependency/* gtardif.ServerMain
