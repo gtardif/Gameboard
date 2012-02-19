@@ -20,6 +20,17 @@
 		<servlet-name>chatServlet</servlet-name>
 		<url-pattern>/chat</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+        <servlet-name>AtmosphereServlet</servlet-name>
+        <servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+        <async-supported>true</async-supported>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AtmosphereServlet</servlet-name>
+        <url-pattern>/ChatAtmosphereHandler</url-pattern>
+    </servlet-mapping>
 
 	<listener>
 		<listener-class>gtardif.ServerMain</listener-class>
