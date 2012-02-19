@@ -7,10 +7,15 @@ import org.zdevra.guice.mvc.annotations.View;
 
 @Controller
 public class MyController {
-	@Path("")
+	public MyController() {
+		System.out.println("controller");
+	}
+
+	@Path("/hello.html")
 	@Model("msg")
 	@View("hello.jsp")
 	public String hello() {
-		return "hello world";
+		System.out.println("render");
+		return "world";
 	}
 }

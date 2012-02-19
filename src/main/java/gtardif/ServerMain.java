@@ -19,7 +19,7 @@ public class ServerMain extends GuiceServletContextListener {
 		@Override
 		protected void configureControllers() {
 			System.out.println("server");
-			control("/toto").withController(MyController.class);
+			control("/hello/*").withController(MyController.class);
 		}
 	}
 
