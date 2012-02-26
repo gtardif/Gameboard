@@ -6,12 +6,14 @@
 		<filter-name>guiceFilter</filter-name>
 		<filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
 	</filter>
-
 	<filter-mapping>
 		<filter-name>guiceFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+	<listener>
+		<listener-class>gtardif.LimeServletListener</listener-class>
+	</listener>
+
 	<servlet>
 		<servlet-name>chatServlet</servlet-name>
 		<servlet-class>gtardif.ChatServlet</servlet-class>
@@ -20,8 +22,4 @@
 		<servlet-name>chatServlet</servlet-name>
 		<url-pattern>/chat</url-pattern>
 	</servlet-mapping>
-
-	<listener>
-		<listener-class>gtardif.ServerMain</listener-class>
-	</listener>
 </web-app>
