@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class FirstTestIntegration extends WebTester {
-	private static final int PORT = 1080;
+	private static final int PORT = 2080;
 	private static GameServer gameServer;
 
 	@BeforeClass
