@@ -1,5 +1,0 @@
-<atmosphere-handlers>
-	<atmosphere-handler context-root="/ChatAtmosphereHandler" class-name="gtardif.ChatAtmosphereHandler">
-		<property name="name" value="Chat" />
-	</atmosphere-handler>
- </atmosphere-handlers>
