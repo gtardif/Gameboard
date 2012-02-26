@@ -3,6 +3,7 @@ package gtardif;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.zdevra.guice.mvc.MvcModule;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
@@ -38,7 +39,7 @@ public class ServerMain extends GuiceServletContextListener {
 		try {
 			return Integer.valueOf(System.getenv("PORT"));
 		} catch (Exception e) {
-			return 8080;
+			return 1080;
 		}
 	}
 }
