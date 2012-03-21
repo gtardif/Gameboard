@@ -11,6 +11,6 @@ public class MyController {
 	@Model("msg")
 	@View("hello.jsp")
 	public String hello() {
-		return "world";
+		return "world 2";
 	}
 }

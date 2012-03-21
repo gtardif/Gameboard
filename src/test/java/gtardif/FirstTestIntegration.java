@@ -31,7 +31,7 @@ public class FirstTestIntegration extends WebTester {
 	public void canLoadCollecteForPresentationComponent() {
 		beginAt("/hello/hello.html");
 
-		assertTextPresent("Hello world");
+		assertTextPresent("Hello world 2");
 	}
 
 	@AfterClass
