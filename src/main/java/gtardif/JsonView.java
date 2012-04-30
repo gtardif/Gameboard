@@ -40,42 +40,33 @@
  */
 package gtardif;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
+import java.io.IOException;
 
-public class GameServer {
-	private final int port;
-	private Server server;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-	GameServer(int port) {
-		this.port = port;
+import org.eclipse.jetty.http.HttpStatus;
+import org.zdevra.guice.mvc.ViewPoint;
+
+import com.google.common.base.Throwables;
+import com.google.gson.Gson;
+
+public class JsonView implements ViewPoint {
+	private final Object toRender;
+
+	public JsonView(Object toRender) {
+		this.toRender = toRender;
 	}
 
-	public void start() throws Exception {
-		server = new Server(port);
-
-		WebAppContext webappContext = new WebAppContext("src/main/webapp", "/");
-		webappContext.setParentLoaderPriority(true);
-		server.setHandler(webappContext);
-
-		server.start();
-	}
-
-	public void startAndJoin() throws Exception {
-		start();
-		server.join();
-	}
-
-	public boolean isRunning() {
-		return server.isRunning();
-	}
-
-	public void stop() throws Exception {
-		server.stop();
-	}
-
-	public static void main(String[] args) throws Exception {
-		GameServer gameServer = new GameServer(1080);
-		gameServer.startAndJoin();
+	@Override
+	public void render(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response) {
+		try {
+			response.setContentType("application/json");
+			response.setStatus(HttpStatus.OK_200);
+			response.getOutputStream().write(new Gson().toJson(toRender).getBytes());
+		} catch (IOException e) {
+			Throwables.propagate(e);
+		}
 	}
 }

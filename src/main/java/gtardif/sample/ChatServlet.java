@@ -1,4 +1,4 @@
-package gtardif;
+package gtardif.sample;
 
 import java.io.IOException;
 import java.util.Set;

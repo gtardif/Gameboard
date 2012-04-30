@@ -1,5 +1,6 @@
-package gtardif;
+package gtardif.sample;
 
+import gtardif.web.GameWebServer;
 import net.sourceforge.jwebunit.junit.WebTester;
 
 import org.junit.AfterClass;
@@ -9,11 +10,11 @@ import org.junit.Test;
 
 public class FirstTestIntegration extends WebTester {
 	private static final int PORT = 2080;
-	private static GameServer gameServer;
+	private static GameWebServer gameServer;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		gameServer = new GameServer(PORT);
+		gameServer = new GameWebServer(PORT);
 		gameServer.start();
 		while (true) {
 			if (gameServer.isRunning()) {

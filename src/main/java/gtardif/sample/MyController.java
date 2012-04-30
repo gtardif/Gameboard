@@ -1,4 +1,4 @@
-package gtardif;
+package gtardif.sample;
 
 import org.zdevra.guice.mvc.annotations.Controller;
 import org.zdevra.guice.mvc.annotations.Model;

@@ -1,4 +1,7 @@
-package gtardif;
+package gtardif.web;
+
+import gtardif.GameController;
+import gtardif.sample.MyController;
 
 import org.zdevra.guice.mvc.MvcModule;
 
@@ -16,6 +19,7 @@ public class LimeServletListener extends GuiceServletContextListener {
 		@Override
 		protected void configureControllers() {
 			control("/hello/*").withController(MyController.class);
+			control("/game/*").withController(GameController.class);
 		}
 	}
 }

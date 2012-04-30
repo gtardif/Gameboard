@@ -1,0 +1,19 @@
+<html>
+<head>
+    <title>Games</title>
+    <script src=js/libs/zepto.js></script>
+</head>
+<body>
+	Game List 
+	<div id="gameList"></div>
+</body>
+<script>
+	Zepto(function($){
+		$.getJSON("/game/listGames", function(json){
+			json.forEach(function(game){
+				$("#gameList").append("<li class='"+ game.status + "'>" + game.name + "</li>");
+			});
+		});
+	})
+</script>
+</html>
