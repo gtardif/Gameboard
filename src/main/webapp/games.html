@@ -10,6 +10,8 @@
 <script>
 	Zepto(function($){
 		$.getJSON("/game/listGames", function(json){
+			console.log("INIT JSON");
+			$("#gameList").empty();
 			json.forEach(function(game){
 				$("#gameList").append("<li class='"+ game.status + "'>" + game.name + "</li>");
 			});
