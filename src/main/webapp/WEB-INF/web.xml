@@ -18,8 +18,12 @@
 		<servlet-name>chatServlet</servlet-name>
 		<servlet-class>gtardif.sample.ChatServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>gameServlet</servlet-name>
+		<servlet-class>gtardif.GameWebSocketServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
-		<servlet-name>chatServlet</servlet-name>
-		<url-pattern>/chat</url-pattern>
+		<servlet-name>gameServlet</servlet-name>
+		<url-pattern>/gameMessage</url-pattern>
 	</servlet-mapping>
 </web-app>

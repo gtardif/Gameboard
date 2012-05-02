@@ -1,19 +1,48 @@
 <html>
 <head>
-    <title>Games</title>
-    <script src=js/libs/zepto.js></script>
+<title>Games</title>
+<script src=js/libs/zepto.js></script>
 </head>
 <body>
-	Game List 
+	Game List
 	<div id="gameList"></div>
+	<div id="messages"></div>
 </body>
 <script>
-	Zepto(function($){
-		$.getJSON("/game/listGames", function(json){
+	newLine = function(game) {
+		return "<li id='"+game.name+"' class='"+ game.status + "'>" + game.name
+				+ " <a href=# onCLick='joinGame(\"" + game.name.toString()
+				+ "\")'>join</a </li>";
+	};
+
+	register = function() {
+		console.log(document.location);
+		var location = "ws://" + document.location.host + "/gameMessage";
+		_ws = new WebSocket(location, "game");
+		_ws.onopen = function() {
+			alert("opened");
+		};
+		_ws.onmessage = function(message) {
+			$("#messages").append("<li>" + message.data + "</li>");
+		};
+		_ws.onclose = function() {
+			alert("closed");
+		};
+		return _ws;
+	};
+
+	joinGame = function(gameId) {
+		console.log("join " + gameId);
+		ws.send("join:" + gameId);
+	}
+
+	Zepto(function($) {
+		ws = register();
+		$.getJSON("/game/listGames", function(json) {
 			console.log("INIT JSON");
 			$("#gameList").empty();
-			json.forEach(function(game){
-				$("#gameList").append("<li class='"+ game.status + "'>" + game.name + "</li>");
+			json.forEach(function(game) {
+				$("#gameList").append(newLine(game));
 			});
 		});
 	})
