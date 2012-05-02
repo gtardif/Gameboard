@@ -1,14 +1,17 @@
 package gtardif;
 
 import static org.fest.assertions.Assertions.*;
+import gtardif.utils.Shell;
+import gtardif.utils.Shell.Result;
 import gtardif.web.GameWebServer;
-import net.gageot.test.utils.Shell;
 import net.sourceforge.jwebunit.junit.WebTester;
 
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.google.common.base.Joiner;
 
 public class GameTestIntegration extends WebTester {
 	private static final int PORT = 2080;
@@ -49,7 +52,8 @@ public class GameTestIntegration extends WebTester {
 	}
 
 	static void jsTest(String jsTest) {
-		int returnCode = new Shell().execute(String.format("./mocha.sh %s %d", jsTest, 2080));
-		assertThat(returnCode).isEqualTo(0);
+		Result result = new Shell().execute(String.format("./mocha.sh %s %d", jsTest, 2080));
+		int returnCode = result.getStatus();
+		assertThat(returnCode).overridingErrorMessage(Joiner.on("\n").join(result.getLogs())).isEqualTo(0);
 	}
 }
