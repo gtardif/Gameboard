@@ -1,8 +1,8 @@
-package gtardif;
+package gtardif.p4;
 
 import static com.google.common.base.Preconditions.*;
-import static gtardif.P4Board.*;
-import static gtardif.Status.*;
+import static gtardif.p4.P4Board.*;
+import static gtardif.p4.Status.*;
 
 import com.google.common.annotations.VisibleForTesting;
 

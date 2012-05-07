@@ -1,7 +1,7 @@
-package gtardif;
+package gtardif.p4;
 
 import static com.google.common.collect.Lists.*;
-import static gtardif.Pawn.*;
+import static gtardif.p4.Pawn.*;
 import gtardif.utils.Iter;
 
 import java.util.List;

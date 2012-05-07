@@ -1,6 +1,6 @@
-package gtardif;
+package gtardif.p4;
 
-import static gtardif.Status.*;
+import static gtardif.p4.Status.*;
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
 import gtardif.commons.AutoMockRunner;

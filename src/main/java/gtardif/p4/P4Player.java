@@ -1,4 +1,4 @@
-package gtardif;
+package gtardif.p4;
 
 public interface P4Player {
 	String getName();
