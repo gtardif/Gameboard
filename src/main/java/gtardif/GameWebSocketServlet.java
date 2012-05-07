@@ -35,7 +35,6 @@ public class GameWebSocketServlet extends WebSocketServlet {
 
 		@Override
 		public void onMessage(String message) {
-			System.out.println("Message coté serveur : " + message);
 			for (GameWebSocket webSocket : webSockets) {
 				try {
 					webSocket.connection.sendMessage(message);

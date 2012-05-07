@@ -40,8 +40,17 @@
  */
 package gtardif.web;
 
+import gtardif.GameWebSocketServlet;
+import gtardif.sample.ChatServlet;
+
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+
+import com.google.inject.servlet.GuiceFilter;
 
 public class GameWebServer {
 	private final int port;
@@ -54,10 +63,15 @@ public class GameWebServer {
 	public void start() throws Exception {
 		server = new Server(port);
 
-		WebAppContext webappContext = new WebAppContext("src/main/webapp", "/");
-		webappContext.setParentLoaderPriority(true);
-		server.setHandler(webappContext);
+		WebAppContext webapp = new WebAppContext();
+		webapp.setContextPath("/");
+		webapp.setResourceBase("src/main/webapp/");
+		webapp.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
+		webapp.addServlet(ChatServlet.class, "/chat");
+		webapp.addServlet(GameWebSocketServlet.class, "/gameMessage");
+		webapp.addEventListener(new LimeServletListener());
 
+		server.setHandler(webapp);
 		server.start();
 	}
 

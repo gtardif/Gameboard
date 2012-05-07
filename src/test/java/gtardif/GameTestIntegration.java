@@ -32,6 +32,14 @@ public class GameTestIntegration extends WebTester {
 	@Before
 	public void setUp() {
 		setBaseUrl("http://localhost:" + PORT);
+		setScriptingEnabled(false);
+	}
+
+	@Test
+	public void canOpenPage() {
+		beginAt("/games.html");
+
+		assertTitleEquals("Games");
 	}
 
 	@Test
