@@ -1,6 +1,6 @@
 package gtardif.web;
 
-import gtardif.GameWebSocketServlet;
+import gtardif.p4.GameRepository;
 import gtardif.sample.ChatServlet;
 
 import java.util.EnumSet;
@@ -29,8 +29,9 @@ public class GameWebServer {
 		webapp.setResourceBase("src/main/webapp/");
 		webapp.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
 		webapp.addServlet(ChatServlet.class, "/chat");
-		webapp.addServlet(new ServletHolder(new GameWebSocketServlet()), "/gameMessage");
-		webapp.addEventListener(new LimeServletListener());
+		GameRepository gameRepository = new GameRepository();
+		webapp.addServlet(new ServletHolder(new GameWebSocketServlet(gameRepository)), "/gameMessage");
+		webapp.addEventListener(new LimeServletListener(gameRepository));
 
 		server.setHandler(webapp);
 		server.setStopAtShutdown(true);

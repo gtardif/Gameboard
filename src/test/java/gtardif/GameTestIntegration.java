@@ -36,7 +36,7 @@ public class GameTestIntegration extends WebTester {
 	}
 
 	@Test
-	public void canOpenPage() {
+	public void canOpenGamePage() {
 		beginAt("/games.html");
 
 		assertTitleEquals("Games");
@@ -47,13 +47,6 @@ public class GameTestIntegration extends WebTester {
 		jsTest("src/test/js/testHomePage.js");
 	}
 
-	@Test
-	public void canListGames() {
-		beginAt("/game/listGames");
-
-		assertTextPresent("\"name\":\"first\"");
-	}
-
 	@AfterClass
 	public static void tearDownClass() throws Exception {
 		gameServer.stop();
@@ -61,7 +54,6 @@ public class GameTestIntegration extends WebTester {
 
 	static void jsTest(String jsTest) {
 		Result result = new Shell().execute(String.format("./mocha.sh %s %d", jsTest, 2080));
-		int returnCode = result.getStatus();
-		assertThat(returnCode).overridingErrorMessage(Joiner.on("\n").join(result.getLogs())).isEqualTo(0);
+		assertThat(result.getStatus()).overridingErrorMessage(Joiner.on("\n").join(result.getLogs())).isEqualTo(0);
 	}
 }

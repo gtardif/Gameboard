@@ -5,7 +5,12 @@
 </head>
 <body>
 	Game List
+	
 	<div id="gameList"></div>
+	<p/>
+	<a href="#" onClick="createGame('first')">Create Game</a>
+	
+	<p/>
 	<div id="messages"></div>
 </body>
 <script>
@@ -25,17 +30,27 @@
 	};
 
 	joinGame = function(gameId) {
-		ws.send("join:" + gameId);
+		ws.send("join " + gameId);
 	}
 
-	Zepto(function($) {
-		ws = register();
-		$.getJSON("/game/listGames", function(json) {
+	createGame = function(gameId) {
+		$.getJSON("/game/create/" + gameId, function(json) {
+			listGames();
+		});
+	};
+	
+	listGames = function(){
+		$.getJSON("/game/list", function(json) {
 			$("#gameList").empty();
 			json.forEach(function(game) {
 				$("#gameList").append(newLine(game));
 			});
-		});
+		});		
+	};
+
+	Zepto(function($) {
+		ws = register();
+		listGames();
 	})
 </script>
 </html>

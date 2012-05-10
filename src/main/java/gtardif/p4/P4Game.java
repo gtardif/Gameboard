@@ -5,6 +5,7 @@ import static gtardif.p4.P4Board.*;
 import static gtardif.p4.Status.*;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Function;
 
 public class P4Game {
 	private P4Board board;
@@ -26,6 +27,17 @@ public class P4Game {
 		return name;
 	}
 
+	public Status getStatus() {
+		return status;
+	}
+
+	public static Function<P4Game, String> TO_NAME = new Function<P4Game, String>() {
+		@Override
+		public String apply(P4Game game) {
+			return game.getName();
+		}
+	};
+
 	public void addPlayer(P4Player player) {
 		checkState(status == WAITING, "Game already started");
 		if (player1 == null) {
@@ -41,10 +53,6 @@ public class P4Game {
 		status = STARTED;
 		board = createBoard(player1, player2);
 		player1.yourTurn(board);
-	}
-
-	public Status getStatus() {
-		return status;
 	}
 
 	public void play(P4Player player, P4Move move) {
