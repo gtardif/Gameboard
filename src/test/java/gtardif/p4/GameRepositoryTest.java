@@ -49,9 +49,19 @@ public class GameRepositoryTest {
 	public void canNotifyWhenGameCreated() {
 		gameRepository.addListener(mockGameRepoListener);
 
+		P4Game newGame = gameRepository.create("toto");
+
+		verify(mockGameRepoListener).gameCreated(newGame);
+	}
+
+	@Test
+	public void canRemoveListener() {
+		gameRepository.addListener(mockGameRepoListener);
+		gameRepository.removeListener(mockGameRepoListener);
+
 		gameRepository.create("toto");
 
-		verify(mockGameRepoListener).gameCreated("toto");
+		verifyZeroInteractions(mockGameRepoListener);
 	}
 
 	@Test

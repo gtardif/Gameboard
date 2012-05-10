@@ -5,8 +5,11 @@ import static gtardif.p4.P4Game.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.inject.Singleton;
+
 import net.gageot.listmaker.ListMaker;
 
+@Singleton
 public class GameRepository {
 	private final List<P4Game> games = new CopyOnWriteArrayList<P4Game>();
 	private final List<GameRepoListener> listeners = new CopyOnWriteArrayList<GameRepoListener>();
@@ -18,7 +21,7 @@ public class GameRepository {
 	public P4Game create(String gameId) {
 		P4Game newGame = new P4Game(gameId);
 		games.add(newGame);
-		notifyGameCreated(gameId);
+		notifyGameCreated(newGame);
 		return newGame;
 	}
 
@@ -26,13 +29,17 @@ public class GameRepository {
 		listeners.add(listener);
 	}
 
-	private void notifyGameCreated(String gameId) {
+	private void notifyGameCreated(P4Game newGame) {
 		for (GameRepoListener listener : listeners) {
-			listener.gameCreated(gameId);
+			listener.gameCreated(newGame);
 		}
 	}
 
 	public P4Game getGame(String gameId) {
 		return ListMaker.with(games).indexBy(TO_NAME).get(gameId);
+	}
+
+	public void removeListener(GameRepoListener gameRepoListener) {
+		listeners.remove(gameRepoListener);
 	}
 }
