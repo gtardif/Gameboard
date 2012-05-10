@@ -3,6 +3,7 @@ package gtardif.web;
 import gtardif.sample.ChatServlet;
 
 import java.util.EnumSet;
+import java.util.logging.LogManager;
 
 import javax.servlet.DispatcherType;
 
@@ -10,6 +11,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -17,6 +20,15 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
 
 public class GameWebServer extends AbstractIdleService {
+	static {
+		try {
+			Preconditions.checkArgument(GameWebServer.class.getResourceAsStream("/log4j.properties") != null);
+			LogManager.getLogManager().readConfiguration(GameWebServer.class.getResourceAsStream("/log4j.properties"));
+		} catch (Exception e) {
+			Throwables.propagate(e);
+		}
+	}
+
 	private final int port;
 	private Server server;
 
