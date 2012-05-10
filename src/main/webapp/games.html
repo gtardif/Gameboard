@@ -14,10 +14,10 @@
 	<div id="messages"></div>
 </body>
 <script>
-	newLine = function(game) {
+	newGameLine = function(game) {
 		return "<li id='"+game.name+"' class='"+ game.status + "'>" + game.name
-				+ " <a href=# onCLick='joinGame(\"" + game.name.toString()
-				+ "\")'>join</a </li>";
+				+ " (" + game.status + ") <a href=# onCLick='joinGame(\"" + game.name.toString()
+				+ "\")'>join game</a></li>";
 	};
 
 	register = function() {
@@ -34,8 +34,8 @@
 	}
 
 	createGame = function(gameId) {
-		$.getJSON("/game/create/" + gameId, function(json) {
-			listGames();
+		$.getJSON("/game/create/" + gameId, function(game) {
+			$("#gameList").append(newGameLine(game));
 		});
 	};
 	
@@ -43,7 +43,7 @@
 		$.getJSON("/game/list", function(json) {
 			$("#gameList").empty();
 			json.forEach(function(game) {
-				$("#gameList").append(newLine(game));
+				$("#gameList").append(newGameLine(game));
 			});
 		});		
 	};

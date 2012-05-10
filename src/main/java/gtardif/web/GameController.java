@@ -3,6 +3,7 @@ package gtardif.web;
 import static gtardif.web.RequestResult.*;
 import gtardif.p4.GameRepository;
 import gtardif.p4.P4Game;
+import gtardif.web.utils.JsonView;
 
 import java.util.List;
 
@@ -36,8 +37,7 @@ public class GameController {
 
 	@Path("/create/([^/]+)")
 	@JsonView
-	public RequestResult createGame(@UriParameter(1) String gameId) {
-		games.create(gameId);
-		return OK;
+	public P4Game createGame(@UriParameter(1) String gameId) {
+		return games.create(gameId);
 	}
 }

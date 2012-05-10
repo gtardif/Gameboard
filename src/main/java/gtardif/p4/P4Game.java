@@ -18,11 +18,6 @@ public class P4Game {
 		this.name = name;
 	}
 
-	public P4Game(String name, Status status) {
-		this.name = name;
-		this.status = status;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -30,13 +25,6 @@ public class P4Game {
 	public Status getStatus() {
 		return status;
 	}
-
-	public static Function<P4Game, String> TO_NAME = new Function<P4Game, String>() {
-		@Override
-		public String apply(P4Game game) {
-			return game.getName();
-		}
-	};
 
 	public void addPlayer(P4Player player) {
 		checkState(status == WAITING, "Game already started");
@@ -70,4 +58,11 @@ public class P4Game {
 	P4Board createBoard(P4Player player1, P4Player player2) {
 		return new P4Board(player1, player2, EMPTY_BOARD, player1);
 	}
+
+	public static Function<P4Game, String> TO_NAME = new Function<P4Game, String>() {
+		@Override
+		public String apply(P4Game game) {
+			return game.getName();
+		}
+	};
 }

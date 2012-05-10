@@ -1,4 +1,4 @@
-package gtardif.web;
+package gtardif.web.utils;
 
 import java.lang.annotation.Annotation;
 

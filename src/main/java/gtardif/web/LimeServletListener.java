@@ -2,6 +2,7 @@ package gtardif.web;
 
 import gtardif.p4.GameRepository;
 import gtardif.sample.MyController;
+import gtardif.web.utils.JsonViewScanner;
 
 import javax.inject.Inject;
 
