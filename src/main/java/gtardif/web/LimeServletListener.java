@@ -28,6 +28,7 @@ public class LimeServletListener extends GuiceServletContextListener {
 		@Override
 		protected void configureControllers() {
 			bind(GameRepository.class).toInstance(gameRepository);
+			registerViewScanner(JsonViewScanner.class);
 			control("/hello/*").withController(MyController.class);
 			control("/game/*").withController(GameController.class);
 		}

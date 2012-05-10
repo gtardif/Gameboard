@@ -1,7 +1,10 @@
 package gtardif.web;
 
+import static gtardif.web.RequestResult.*;
 import gtardif.p4.GameRepository;
 import gtardif.p4.P4Game;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -19,19 +22,22 @@ public class GameController {
 	}
 
 	@Path("/list")
-	public JsonView getGameList() {
-		return new JsonView(games.getGames());
+	@JsonView
+	public List<P4Game> getGameList() {
+		return games.getGames();
 	}
 
 	@Path("/join/([^/]+)")
-	public JsonView joinGame(@UriParameter(1) String gameId) {
+	@JsonView
+	public RequestResult joinGame(@UriParameter(1) String gameId) {
 		P4Game game = games.getGame(gameId);
-		return new JsonView(RequestResult.OK);
+		return OK;
 	}
 
 	@Path("/create/([^/]+)")
-	public JsonView createGame(@UriParameter(1) String gameId) {
+	@JsonView
+	public RequestResult createGame(@UriParameter(1) String gameId) {
 		games.create(gameId);
-		return new JsonView(RequestResult.OK);
+		return OK;
 	}
 }

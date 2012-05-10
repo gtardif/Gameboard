@@ -58,7 +58,7 @@ public class GameWebServer extends AbstractIdleService {
 
 	private static final class GameServerModule extends AbstractModule {
 		@Override
-		protected void configure() {
+		protected void configure() {// nothing to configure
 		}
 	}
 }

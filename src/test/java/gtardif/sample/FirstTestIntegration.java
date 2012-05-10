@@ -1,31 +1,21 @@
 package gtardif.sample;
 
+import static net.gageot.test.rules.ServiceRule.*;
 import gtardif.web.GameWebServer;
+import net.gageot.test.rules.ServiceRule;
 import net.sourceforge.jwebunit.junit.WebTester;
 
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 public class FirstTestIntegration extends WebTester {
-	private static final int PORT = 2080;
-	private static GameWebServer gameServer;
-
-	@BeforeClass
-	public static void setUpClass() throws Exception {
-		gameServer = new GameWebServer(PORT);
-		gameServer.start();
-		while (true) {
-			if (gameServer.isRunning()) {
-				return;
-			}
-		}
-	}
+	@ClassRule
+	public static ServiceRule<GameWebServer> gameServer = startWithRandomPort(GameWebServer.class);
 
 	@Before
 	public void setUp() {
-		setBaseUrl("http://localhost:" + PORT);
+		setBaseUrl("http://localhost:" + gameServer.service().getPort());
 	}
 
 	@Test
@@ -33,10 +23,5 @@ public class FirstTestIntegration extends WebTester {
 		beginAt("/hello/hello.html");
 
 		assertTextPresent("Hello world 2");
-	}
-
-	@AfterClass
-	public static void tearDownClass() throws Exception {
-		gameServer.stop();
 	}
 }
