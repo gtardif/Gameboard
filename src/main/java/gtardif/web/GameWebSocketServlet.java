@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.eclipse.jetty.websocket.WebSocket;
@@ -18,6 +19,7 @@ public class GameWebSocketServlet extends WebSocketServlet {
 	private final Set<GameWebSocket> webSockets = new CopyOnWriteArraySet<GameWebSocket>();
 	private final GameRepository gameRepository;
 
+	@Inject
 	public GameWebSocketServlet(GameRepository gameRepository) {
 		this.gameRepository = gameRepository;
 	}

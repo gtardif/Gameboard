@@ -1,6 +1,5 @@
 package gtardif.web;
 
-import gtardif.p4.GameRepository;
 import gtardif.sample.ChatServlet;
 
 import java.util.EnumSet;
@@ -11,9 +10,13 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import com.google.common.util.concurrent.AbstractIdleService;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
 
-public class GameWebServer {
+public class GameWebServer extends AbstractIdleService {
 	private final int port;
 	private Server server;
 
@@ -21,38 +24,41 @@ public class GameWebServer {
 		this.port = port;
 	}
 
-	public void start() throws Exception {
+	public int getPort() {
+		return port;
+	}
+
+	public static void main(String[] args) {
+		GameWebServer gameServer = new GameWebServer(1080);
+		gameServer.startAndWait();
+	}
+
+	@Override
+	protected void startUp() throws Exception {
 		server = new Server(port);
+		Injector injector = Guice.createInjector(new GameServerModule());
 
 		WebAppContext webapp = new WebAppContext();
 		webapp.setContextPath("/");
 		webapp.setResourceBase("src/main/webapp/");
 		webapp.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
 		webapp.addServlet(ChatServlet.class, "/chat");
-		GameRepository gameRepository = new GameRepository();
-		webapp.addServlet(new ServletHolder(new GameWebSocketServlet(gameRepository)), "/gameMessage");
-		webapp.addEventListener(new LimeServletListener(gameRepository));
+		webapp.addServlet(new ServletHolder(injector.getInstance(GameWebSocketServlet.class)), "/gameMessage");
+		webapp.addEventListener(injector.getInstance(LimeServletListener.class));
 
 		server.setHandler(webapp);
 		server.setStopAtShutdown(true);
 		server.start();
 	}
 
-	public void startAndJoin() throws Exception {
-		start();
-		server.join();
-	}
-
-	public boolean isRunning() {
-		return server.isRunning();
-	}
-
-	public void stop() throws Exception {
+	@Override
+	protected void shutDown() throws Exception {
 		server.stop();
 	}
 
-	public static void main(String[] args) throws Exception {
-		GameWebServer gameServer = new GameWebServer(1080);
-		gameServer.startAndJoin();
+	private static final class GameServerModule extends AbstractModule {
+		@Override
+		protected void configure() {
+		}
 	}
 }

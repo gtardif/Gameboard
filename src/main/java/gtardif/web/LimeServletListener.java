@@ -3,6 +3,8 @@ package gtardif.web;
 import gtardif.p4.GameRepository;
 import gtardif.sample.MyController;
 
+import javax.inject.Inject;
+
 import org.zdevra.guice.mvc.MvcModule;
 
 import com.google.inject.Guice;
@@ -12,6 +14,7 @@ import com.google.inject.servlet.GuiceServletContextListener;
 public class LimeServletListener extends GuiceServletContextListener {
 	private final GameRepository gameRepository;
 
+	@Inject
 	public LimeServletListener(GameRepository gameRepository) {
 		this.gameRepository = gameRepository;
 	}

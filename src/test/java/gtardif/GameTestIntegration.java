@@ -1,42 +1,27 @@
 package gtardif;
 
+import static net.gageot.test.rules.ServiceRule.*;
 import static org.fest.assertions.Assertions.*;
 import gtardif.commons.Shell;
 import gtardif.commons.Shell.Result;
 import gtardif.web.GameWebServer;
+import net.gageot.test.rules.ServiceRule;
 import net.sourceforge.jwebunit.junit.WebTester;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.google.common.base.Joiner;
 
 public class GameTestIntegration extends WebTester {
-	private static final int PORT = 2080;
-	private static GameWebServer gameServer;
-
-	@BeforeClass
-	public static void setUpClass() throws Exception {
-		gameServer = new GameWebServer(PORT);
-		gameServer.start();
-		while (true) {
-			if (gameServer.isRunning()) {
-				return;
-			}
-			Thread.sleep(100);
-		}
-	}
-
-	@Before
-	public void setUp() {
-		setBaseUrl("http://localhost:" + PORT);
-		setScriptingEnabled(false);
-	}
+	@ClassRule
+	public static ServiceRule<GameWebServer> gameServer = startWithRandomPort(GameWebServer.class);
 
 	@Test
 	public void canOpenGamePage() {
+		setBaseUrl("http://localhost:" + gameServer.service().getPort());
+		setScriptingEnabled(false);
+
 		beginAt("/games.html");
 
 		assertTitleEquals("Games");
@@ -47,13 +32,8 @@ public class GameTestIntegration extends WebTester {
 		jsTest("src/test/js/testHomePage.js");
 	}
 
-	@AfterClass
-	public static void tearDownClass() throws Exception {
-		gameServer.stop();
-	}
-
 	static void jsTest(String jsTest) {
-		Result result = new Shell().execute(String.format("./mocha.sh %s %d", jsTest, 2080));
+		Result result = new Shell().execute(String.format("./mocha.sh %s %d", jsTest, gameServer.service().getPort()));
 		assertThat(result.getStatus()).overridingErrorMessage(Joiner.on("\n").join(result.getLogs())).isEqualTo(0);
 	}
 }
