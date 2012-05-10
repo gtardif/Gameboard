@@ -1,10 +1,11 @@
 package gtardif.p4;
 
 import static gtardif.p4.P4Game.*;
-import gtardif.utils.Iter;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import net.gageot.listmaker.ListMaker;
 
 public class GameRepository {
 	private final List<P4Game> games = new CopyOnWriteArrayList<P4Game>();
@@ -32,6 +33,6 @@ public class GameRepository {
 	}
 
 	public P4Game getGame(String gameId) {
-		return Iter.with(games).indexBy(TO_NAME).get(gameId);
+		return ListMaker.with(games).indexBy(TO_NAME).get(gameId);
 	}
 }

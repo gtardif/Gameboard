@@ -5,7 +5,7 @@ import static gtardif.p4.P4Board.*;
 import static gtardif.p4.Pawn.*;
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
-import gtardif.commons.AutoMockRunner;
+import net.gageot.test.mocks.AutoMockRunner;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

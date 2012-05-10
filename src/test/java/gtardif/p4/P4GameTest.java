@@ -3,7 +3,7 @@ package gtardif.p4;
 import static gtardif.p4.Status.*;
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
-import gtardif.commons.AutoMockRunner;
+import net.gageot.test.mocks.AutoMockRunner;
 
 import org.junit.Before;
 import org.junit.Test;

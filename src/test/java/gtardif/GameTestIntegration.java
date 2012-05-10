@@ -1,8 +1,8 @@
 package gtardif;
 
 import static org.fest.assertions.Assertions.*;
-import gtardif.utils.Shell;
-import gtardif.utils.Shell.Result;
+import gtardif.commons.Shell;
+import gtardif.commons.Shell.Result;
 import gtardif.web.GameWebServer;
 import net.sourceforge.jwebunit.junit.WebTester;
 

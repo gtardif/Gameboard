@@ -2,9 +2,10 @@ package gtardif.p4;
 
 import static com.google.common.collect.Lists.*;
 import static gtardif.p4.Pawn.*;
-import gtardif.utils.Iter;
 
 import java.util.List;
+
+import net.gageot.listmaker.ListMaker;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
@@ -38,9 +39,9 @@ public class P4Board {
 	}
 
 	private P4Player getWinner(List<List<Pawn>> columns) {
-		if (Iter.with(columns).contains(winningColumn(RED))) {
+		if (ListMaker.with(columns).contains(winningColumn(RED))) {
 			return player1;
-		} else if (Iter.with(columns).contains(winningColumn(YELLOW))) {
+		} else if (ListMaker.with(columns).contains(winningColumn(YELLOW))) {
 			return player2;
 		}
 		return null;

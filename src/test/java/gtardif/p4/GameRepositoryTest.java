@@ -2,9 +2,10 @@ package gtardif.p4;
 
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
-import gtardif.commons.AutoMockRunner;
 
 import java.util.List;
+
+import net.gageot.test.mocks.AutoMockRunner;
 
 import org.junit.Before;
 import org.junit.Test;

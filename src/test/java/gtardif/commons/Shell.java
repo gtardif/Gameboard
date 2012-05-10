@@ -1,4 +1,4 @@
-package gtardif.utils;
+package gtardif.commons;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,15 +6,8 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-/**
- * Execute external commands.
- */
 public class Shell {
-	/**
-	 * Execute an external command.
-	 * 
-	 * @return exitCode or -1 if an exception occured
-	 */
+	@SuppressWarnings("unchecked")
 	public Result execute(String command) {
 		try {
 			Process process = Runtime.getRuntime().exec(command, null, new File("."));
