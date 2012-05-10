@@ -20,6 +20,9 @@ public class Shell {
 			Process process = Runtime.getRuntime().exec(command, null, new File("."));
 			process.waitFor();
 			List<String> lines = IOUtils.readLines(process.getErrorStream());
+			List<String> infoLines = IOUtils.readLines(process.getInputStream());
+			lines.add("EXEC OUTPUT : ");
+			lines.addAll(infoLines);
 			return new Result(process.exitValue(), lines);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

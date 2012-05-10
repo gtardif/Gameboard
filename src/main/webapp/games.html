@@ -16,30 +16,21 @@
 	};
 
 	register = function() {
-		console.log(document.location);
 		var location = "ws://" + document.location.host + "/gameMessage";
 		_ws = new WebSocket(location, "game");
-		_ws.onopen = function() {
-			alert("opened");
-		};
 		_ws.onmessage = function(message) {
 			$("#messages").append("<li>" + message.data + "</li>");
-		};
-		_ws.onclose = function() {
-			alert("closed");
 		};
 		return _ws;
 	};
 
 	joinGame = function(gameId) {
-		console.log("join " + gameId);
 		ws.send("join:" + gameId);
 	}
 
 	Zepto(function($) {
 		ws = register();
 		$.getJSON("/game/listGames", function(json) {
-			console.log("INIT JSON");
 			$("#gameList").empty();
 			json.forEach(function(game) {
 				$("#gameList").append(newLine(game));
