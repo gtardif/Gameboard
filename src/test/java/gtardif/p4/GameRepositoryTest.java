@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 public class GameRepositoryTest {
 	private GameRepository gameRepository;
 	private GameRepoListener mockGameRepoListener;
+	private P4Game mockGame;
 
 	@Before
 	public void setUp() {
@@ -51,7 +52,16 @@ public class GameRepositoryTest {
 
 		P4Game newGame = gameRepository.create("toto");
 
-		verify(mockGameRepoListener).gameCreated(newGame);
+		verify(mockGameRepoListener).gameUpdated(newGame);
+	}
+
+	@Test
+	public void canProcessNotification() {
+		gameRepository.addListener(mockGameRepoListener);
+
+		gameRepository.notifyGameUpdated(mockGame);
+
+		verify(mockGameRepoListener).gameUpdated(mockGame);
 	}
 
 	@Test
@@ -71,5 +81,11 @@ public class GameRepositoryTest {
 
 		assertThat(gameRepository.getGame("id")).isSameAs(game);
 		assertThat(gameRepository.getGame("id2")).isSameAs(game2);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void throwsExceptionIfGameIdAreadyExist() {
+		gameRepository.create("ID1");
+		gameRepository.create("ID1");
 	}
 }

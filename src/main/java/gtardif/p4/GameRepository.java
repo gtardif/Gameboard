@@ -1,27 +1,30 @@
 package gtardif.p4;
 
-import static gtardif.p4.P4Game.*;
-
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.inject.Singleton;
 
 import net.gageot.listmaker.ListMaker;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
+
 @Singleton
 public class GameRepository {
-	private final List<P4Game> games = new CopyOnWriteArrayList<P4Game>();
+	private final Map<String, P4Game> games = Maps.newHashMap();
 	private final List<GameRepoListener> listeners = new CopyOnWriteArrayList<GameRepoListener>();
 
 	public List<P4Game> getGames() {
-		return games;
+		return ListMaker.with(games.values()).sortOn(P4Game.TO_NAME).toList();
 	}
 
-	public P4Game create(String gameId) {
+	public synchronized P4Game create(String gameId) {
+		Preconditions.checkArgument(!games.keySet().contains(gameId), "Game with id " + gameId + " already exist.");
 		P4Game newGame = new P4Game(gameId);
-		games.add(newGame);
-		notifyGameCreated(newGame);
+		games.put(gameId, newGame);
+		notifyGameUpdated(newGame);
 		return newGame;
 	}
 
@@ -29,14 +32,14 @@ public class GameRepository {
 		listeners.add(listener);
 	}
 
-	private void notifyGameCreated(P4Game newGame) {
+	public void notifyGameUpdated(P4Game newGame) {
 		for (GameRepoListener listener : listeners) {
-			listener.gameCreated(newGame);
+			listener.gameUpdated(newGame);
 		}
 	}
 
 	public P4Game getGame(String gameId) {
-		return ListMaker.with(games).indexBy(TO_NAME).get(gameId);
+		return games.get(gameId);
 	}
 
 	public void removeListener(GameRepoListener gameRepoListener) {
