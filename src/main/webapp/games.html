@@ -6,17 +6,20 @@
 <body>
 	Game List
 	
+	<div id="userId"></div>
 	<div id="gameList"></div>
 	<p/>
-	<a href="#" onClick="createGame('first')">Create Game</a>
+	<a href="#" onClick="createGame()">Create Game</a>
 	
 	<p/>
 	<div id="messages"></div>
 	<div id="currentGame"></div>
 </body>
 <script>
+	var userId=null;
+	
 	newGameLine = function(game) {
-		return "<li id='"+game.name+"' class='"+ game.status + "'>" + game.name
+		return "<li id='game-"+game.name+"' class='"+ game.status + "'>Game " + game.name
 				+ " (" + game.status + ") <a href=# onCLick='joinGame(\"" + game.name.toString()
 				+ "\")'>join game</a></li>";
 	};
@@ -26,8 +29,12 @@
 		_ws = new WebSocket(location, "game");
 		_ws.onmessage = function(message) {
 			jsonMsg = JSON.parse(message.data);
+			if (jsonMsg.userId){
+				userId=jsonMsg.userId;
+				$("#userId").html(userId);
+			}
 			if (jsonMsg.updatedGame){
-				$("#" + jsonMsg.updatedGame.name).remove();
+				$("#game-" + jsonMsg.updatedGame.name).remove();
 				$("#gameList").append(newGameLine(jsonMsg.updatedGame));
 			}
 			if (jsonMsg.yourTurn){
@@ -37,6 +44,7 @@
 			if (jsonMsg.message){
 				$("#messages").append("<li>" + jsonMsg.message + "</li>");
 			}
+			console.log(userId + "-messages", $("#messages").html());
 		};
 		return _ws;
 	};
@@ -45,8 +53,8 @@
 		ws.send("join " + gameId);
 	}
 
-	createGame = function(gameId) {
-		ws.send("create " + gameId);
+	createGame = function() {
+		ws.send("create");
 	};
 	
 	listGames = function(){

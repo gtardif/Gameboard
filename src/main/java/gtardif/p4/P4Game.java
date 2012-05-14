@@ -31,7 +31,7 @@ public class P4Game {
 		if (player1 == null) {
 			player1 = player;
 		} else if (player2 == null) {
-			checkArgument(player1.getName() != player.getName(), "player has already joind the game");
+			checkArgument(!player1.getName().equals(player.getName()), "player has already joined the game");
 			player2 = player;
 			startGame();
 		}

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,8 @@ public class GameWebSocketServlet extends WebSocketServlet {
 	private static final long serialVersionUID = 1L;
 	private final Set<GameWebSocket> webSockets = new CopyOnWriteArraySet<GameWebSocket>();
 	private final GameRepository gameRepository;
+	private static final AtomicInteger nextGameId = new AtomicInteger(0);
+	private static final AtomicInteger nextUserId = new AtomicInteger(0);
 
 	@Inject
 	public GameWebSocketServlet(GameRepository gameRepository) {
@@ -34,18 +37,25 @@ public class GameWebSocketServlet extends WebSocketServlet {
 
 	@Override
 	public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol) {
-		GameWebSocket gameWebSocket = new GameWebSocket();
+		GameWebSocket gameWebSocket = new GameWebSocket(nextUserId.incrementAndGet());
 		gameRepository.addListener(gameWebSocket);
 		return gameWebSocket;
 	}
 
 	private class GameWebSocket implements WebSocket.OnTextMessage, GameRepoListener {
-		volatile Connection connection;
+		private volatile Connection connection;
+		private final int userId;
+
+		public GameWebSocket(int userId) {
+			this.userId = userId;
+		}
 
 		@Override
 		public void onOpen(Connection connection) {
+			System.out.println("WS - user " + userId + " logged in");
 			this.connection = connection;
 			webSockets.add(this);
+			this.sendMessageMap(ImmutableMap.of("userId", userId, "message", "User " + userId + " logged in"));
 		}
 
 		@Override
@@ -60,22 +70,26 @@ public class GameWebSocketServlet extends WebSocketServlet {
 		@Override
 		public void onMessage(String message) {
 			try {
-				System.out.println("WS : " + message);
+				System.out.println("WS (user " + userId + ") : " + message);
 				StringTokenizer tokens = new StringTokenizer(message);
 				WSCommand wsCommand = WSCommand.valueOf(tokens.nextToken());
 				switch (wsCommand) {
 				case create:
-					P4Game newGame = gameRepository.create(tokens.nextToken());
-					newGame.addPlayer(new WebP4Player("1", this));
+					P4Game newGame = gameRepository.create(nextGameId());
+					newGame.addPlayer(new WebP4Player("" + userId, this));
 					break;
 				case join:
 					P4Game game = gameRepository.getGame(tokens.nextToken());
-					game.addPlayer(new WebP4Player("2", this));
+					game.addPlayer(new WebP4Player("" + userId, this));
 					gameRepository.notifyGameUpdated(game);
 				}
 			} catch (Exception e) {
 				sendMessage(WebSocketMessage.error(e.getMessage()));
 			}
+		}
+
+		private String nextGameId() {
+			return "" + nextGameId.incrementAndGet();
 		}
 
 		@Override
@@ -85,13 +99,14 @@ public class GameWebSocketServlet extends WebSocketServlet {
 
 		private void sendMessage(WebSocketMessage message) {
 			try {
+				System.out.println("sending to " + userId + " msg : " + new Gson().toJson(message));
 				connection.sendMessage(new Gson().toJson(message));
 			} catch (IOException e) {
 				Throwables.propagate(e);
 			}
 		}
 
-		private void sendMessage(Map<String, Object> message) {
+		private void sendMessageMap(Map<String, ? extends Object> message) {
 			try {
 				connection.sendMessage(new Gson().toJson(message));
 			} catch (IOException e) {
@@ -117,7 +132,7 @@ public class GameWebSocketServlet extends WebSocketServlet {
 
 		@Override
 		public void yourTurn(P4Board board) {
-			ws.sendMessage(ImmutableMap.of("yourTurn", true, "board", board));
+			ws.sendMessageMap(ImmutableMap.of("yourTurn", true, "board", board));
 		}
 
 		@Override
