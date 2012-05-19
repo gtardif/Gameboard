@@ -8,9 +8,7 @@ import gtardif.p4.P4Player;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
@@ -27,7 +25,6 @@ import com.google.gson.Gson;
 @Singleton
 public class GameWebSocketServlet extends WebSocketServlet {
 	private static final long serialVersionUID = 1L;
-	private final Set<GameWebSocket> webSockets = new CopyOnWriteArraySet<GameWebSocket>();
 	private final GameRepository gameRepository;
 	private static final AtomicInteger nextGameId = new AtomicInteger(0);
 	private static final AtomicInteger nextUserId = new AtomicInteger(0);
@@ -60,7 +57,6 @@ public class GameWebSocketServlet extends WebSocketServlet {
 		public void onOpen(Connection connection) {
 			System.out.println("WS - user " + userId + " logged in");
 			this.connection = connection;
-			webSockets.add(this);
 			this.sendMessageMap(ImmutableMap.of("userId", userId, "message", "User " + userId + " logged in"));
 		}
 
@@ -70,7 +66,6 @@ public class GameWebSocketServlet extends WebSocketServlet {
 			// TODO restore websocket on client side if closed, with info
 			// TODO restore needed info when reloading page
 			gameRepository.removeListener(this);
-			webSockets.remove(this);
 		}
 
 		@Override
