@@ -2,6 +2,7 @@
 <head>
 <title>Games</title>
 <script src=js/libs/zepto.js></script>
+<script src=js/games.js></script>
 </head>
 <body>
 	Game List
@@ -9,66 +10,19 @@
 	<div id="userId"></div>
 	<div id="gameList"></div>
 	<p/>
-	<a href="#" onClick="createGame()">Create Game</a>
+	<a href="#" onClick="games.createGame()">Create Game</a>
 	
 	<p/>
 	<div id="messages"></div>
 	<div id="currentGame"></div>
 </body>
 <script>
-	var userId=null;
-	
-	newGameLine = function(game) {
-		return "<li id='game-"+game.name+"' class='"+ game.status + "'>Game " + game.name
-				+ " (" + game.status + ") <a href=# onCLick='joinGame(\"" + game.name.toString()
-				+ "\")'>join game</a></li>";
-	};
-
-	register = function() {
-		var location = "ws://" + document.location.host + "/gameMessage";
-		_ws = new WebSocket(location, "game");
-		_ws.onmessage = function(message) {
-			jsonMsg = JSON.parse(message.data);
-			if (jsonMsg.userId){
-				userId=jsonMsg.userId;
-				$("#userId").html(userId);
-			}
-			if (jsonMsg.updatedGame){
-				$("#game-" + jsonMsg.updatedGame.name).remove();
-				$("#gameList").append(newGameLine(jsonMsg.updatedGame));
-			}
-			if (jsonMsg.yourTurn){
-				$("#currentGame").addClass("STARTED");
-				$("#messages").append("<li>" + jsonMsg.board + "</li>");
-			}
-			if (jsonMsg.message){
-				$("#messages").append("<li>" + jsonMsg.message + "</li>");
-			}
-			console.log(userId + "-messages", $("#messages").html());
-		};
-		return _ws;
-	};
-
-	joinGame = function(gameId) {
-		ws.send("join " + gameId);
-	}
-
-	createGame = function() {
-		ws.send("create");
-	};
-	
-	listGames = function(){
-		$.getJSON("/game/list", function(json) {
-			$("#gameList").empty();
-			json.forEach(function(game) {
-				$("#gameList").append(newGameLine(game));
-			});
-		});		
-	};
-	
+	var games;
 	Zepto(function($) {
-		ws = register();
-		listGames();
-	})
+		//$("#gameList"), $("#messages"), $("#currentGame")
+		games = new Games();
+		games.init();
+		games.udpateGameList();
+	});
 </script>
 </html>

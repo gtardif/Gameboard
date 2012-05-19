@@ -54,7 +54,7 @@ testWith2Browsers("User cannot join its own game", function(done, browser1, brow
 	browser1.clickLink("Create Game", allAsync);
 
 	setTimeout(function() {
-		browser1.evaluate("joinGame(1)");
+		browser1.evaluate("games.joinGame(1)");
 		// TODO pb when clicking link : creates a new unwantd browser
 		//browser1.clickLink("#gameList #game-1 a", allAsync);
 	}, 50);
