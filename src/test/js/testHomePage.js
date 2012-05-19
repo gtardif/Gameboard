@@ -66,23 +66,19 @@ testWith1Browser("Page can display game list when opening game page", function(d
 	done();
 });
 
-testWith1Browser("User can join a game", function(done, browser) {
-	browser.clickLink("#gameList #game-1 a",allAsync);
+testWith2Browsers("User can join a game", function(done, browser1, browser2) {
+	browser1.clickLink("Create Game", allAsync);
 
 	setTimeout(function() {
-		expect(browser.text("#gameList #game-1")).to.be("Game 1 (STARTED) join game");
-		expect(browser.query("#gameList #game-1").className).to.contain("STARTED");
+		browser2.evaluate("joinGame(3)");
+		// TODO pb when clicking link : creates a new unwantd browser
+	}, 50);
+
+	setTimeout(function() {
+		expect(browser1.text("#gameList #game-3")).to.be("Game 3 (STARTED) join game");
+		expect(browser1.query("#gameList #game-3").className).to.contain("STARTED");
+		console.log("current", browser1.html("#currentGame"));
+		expect(browser1.query("#currentGame").className).to.contain("STARTED");
 		done();
-	}, 100);
+	}, 150);
 });
-
-test("Game is started automatically", function() {
-	Browser.visit(home, function(e, browser) {
-		browser.clickLink("#gameList #game-1 a", allAsync);
-
-		setTimeout(function() {
-			expect(browser.query("#currentGame").className).to.contain("RUNNING");
-			done();
-		}, 50);
-	});
-})
