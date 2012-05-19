@@ -1,15 +1,19 @@
 Browser = require("zombie");
 expect = require("expect.js");
 
-home = "http://localhost:" + process.env.PORT + "/games.html";
+serverBase = "http://localhost:" + process.env.PORT;
+home = serverBase + "/games.html";
+reset = serverBase + "/game/reset";
 
 testWith2Browsers = function(name, scenario) {
 	var execWith2Browsers = function(scenarioFunction) {
 		return function(done) {
-			Browser.visit(home, function(e, browser2) {
-				Browser.visit(home, function(e, browser) {
-					scenarioFunction(done, browser, browser2);
-				});
+			Browser.visit(reset, function(e, browser1) {
+				browser1.visit(home, function(e, browser2){
+					Browser.visit(home, function(e, browser1) {
+						scenarioFunction(done, browser1, browser2);
+					});
+				})
 			});
 		}
 	};
@@ -19,8 +23,10 @@ testWith2Browsers = function(name, scenario) {
 testWith1Browser = function(name, scenario) {
 	var execWith1Browser = function(scenarioFunction) {
 		return function(done) {
-			Browser.visit(home, function(e, browser) {
-					scenarioFunction(done, browser);
+			Browser.visit(reset, function(e, browser1) {
+				browser1.visit(home, function(e, browser) {
+						scenarioFunction(done, browser);
+				});
 			});
 		}
 	};
@@ -48,8 +54,9 @@ testWith2Browsers("User cannot join its own game", function(done, browser1, brow
 	browser1.clickLink("Create Game", allAsync);
 
 	setTimeout(function() {
-		browser1.evaluate("joinGame(2)");
+		browser1.evaluate("joinGame(1)");
 		// TODO pb when clicking link : creates a new unwantd browser
+		//browser1.clickLink("#gameList #game-1 a", allAsync);
 	}, 50);
 
 	setTimeout(function() {
@@ -60,25 +67,30 @@ testWith2Browsers("User cannot join its own game", function(done, browser1, brow
 	}, 100);
 });
 
-testWith1Browser("Page can display game list when opening game page", function(done, browser) {
-	expect(browser.text("#gameList #game-1.WAITING")).to.be("Game 1 (WAITING) join game");
-	expect(browser.query("#gameList #game-1").className).to.contain("WAITING");
-	done();
+testWith1Browser("Page can display game list when opening game page", function(done, browser1) {
+	browser1.clickLink("Create Game", allAsync);
+	
+	setTimeout(function() {
+		browser1.visit(home, function(e, browser2){
+			expect(browser2.text("#gameList #game-1.WAITING")).to.be("Game 1 (WAITING) join game");
+			expect(browser2.query("#gameList #game-1").className).to.contain("WAITING");
+			done();
+		});
+	}, 50);
 });
 
 testWith2Browsers("User can join a game", function(done, browser1, browser2) {
 	browser1.clickLink("Create Game", allAsync);
 
 	setTimeout(function() {
-		browser2.evaluate("joinGame(3)");
-		// TODO pb when clicking link : creates a new unwantd browser
+		browser2.clickLink("#gameList #game-1 a", allAsync);
 	}, 50);
 
 	setTimeout(function() {
-		expect(browser1.text("#gameList #game-3")).to.be("Game 3 (STARTED) join game");
-		expect(browser1.query("#gameList #game-3").className).to.contain("STARTED");
+		expect(browser1.text("#gameList #game-1")).to.be("Game 1 (STARTED) join game");
+		expect(browser1.query("#gameList #game-1").className).to.contain("STARTED");
 		console.log("current", browser1.html("#currentGame"));
 		expect(browser1.query("#currentGame").className).to.contain("STARTED");
 		done();
-	}, 150);
+	}, 100);
 });

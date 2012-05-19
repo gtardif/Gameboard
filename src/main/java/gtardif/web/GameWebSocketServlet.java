@@ -14,6 +14,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 
 import org.eclipse.jetty.websocket.WebSocket;
@@ -23,6 +24,7 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+@Singleton
 public class GameWebSocketServlet extends WebSocketServlet {
 	private static final long serialVersionUID = 1L;
 	private final Set<GameWebSocket> webSockets = new CopyOnWriteArraySet<GameWebSocket>();
@@ -40,6 +42,10 @@ public class GameWebSocketServlet extends WebSocketServlet {
 		GameWebSocket gameWebSocket = new GameWebSocket(nextUserId.incrementAndGet());
 		gameRepository.addListener(gameWebSocket);
 		return gameWebSocket;
+	}
+
+	public void reset() {
+		nextGameId.set(0);
 	}
 
 	private class GameWebSocket implements WebSocket.OnTextMessage, GameRepoListener {
@@ -113,7 +119,6 @@ public class GameWebSocketServlet extends WebSocketServlet {
 				Throwables.propagate(e);
 			}
 		}
-
 	}
 
 	private static class WebP4Player implements P4Player {

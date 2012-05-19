@@ -45,4 +45,9 @@ public class GameRepository {
 	public void removeListener(GameRepoListener gameRepoListener) {
 		listeners.remove(gameRepoListener);
 	}
+
+	public void reset() {
+		games.clear();
+		listeners.clear();
+	}
 }

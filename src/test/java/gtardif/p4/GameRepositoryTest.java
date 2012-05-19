@@ -88,4 +88,23 @@ public class GameRepositoryTest {
 		gameRepository.create("ID1");
 		gameRepository.create("ID1");
 	}
+
+	@Test
+	public void canResetRepositoryGameList() {
+		gameRepository.create("id1");
+
+		gameRepository.reset();
+
+		assertThat(gameRepository.getGame("id1")).isNull();
+	}
+
+	@Test
+	public void canResetRepositoryGameListeners() {
+		gameRepository.addListener(mockGameRepoListener);
+
+		gameRepository.reset();
+
+		gameRepository.notifyGameUpdated(mockGame);
+		verifyZeroInteractions(mockGameRepoListener);
+	}
 }
