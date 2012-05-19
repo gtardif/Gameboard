@@ -1,5 +1,10 @@
 Browser = require("zombie");
 expect = require("expect.js");
+require("./libs/jshamcrest-0.6.7.js");
+require("./libs/jsmockito-1.0.4.js");
+
+JsHamcrest.Integration.JsTestDriver();
+JsMockito.Integration.importTo(GLOBAL);
 
 serverBase = "http://localhost:" + process.env.PORT;
 home = serverBase + "/games.html";
@@ -41,10 +46,10 @@ testWith2Browsers("User can create game", function(done, browser1, browser2) {
 	browser1.clickLink("Create Game", allAsync);
 
 	setTimeout(function() {
-		expect(browser1.text("#gameList #game-1")).to.be("Game 1 (WAITING) join game");
-		expect(browser1.query("#gameList #game-1").className).to.contain("WAITING");
-		expect(browser2.text("#gameList #game-1")).to.be("Game 1 (WAITING) join game");
-		expect(browser2.query("#gameList #game-1").className).to.contain("WAITING");
+		assertThat(browser1.text("#gameList #game-1"), equalTo("Game 1 (WAITING) join game"));
+		assertThat(browser1.query("#gameList #game-1").className, equalTo("WAITING"));
+		assertThat(browser2.text("#gameList #game-1"), equalTo("Game 1 (WAITING) join game"));
+		assertThat(browser2.query("#gameList #game-1").className, equalTo("WAITING"));
 
 		done();
 	}, 50);
@@ -60,9 +65,9 @@ testWith2Browsers("User cannot join its own game", function(done, browser1, brow
 	}, 50);
 
 	setTimeout(function() {
-		expect(browser1.text("#messages li:last-child")).to.be("Error : player has already joined the game");
-		expect(browser1.query("#messages").children.length).to.be(3);
-		expect(browser2.query("#messages").children.length).to.be(2);
+		assertThat(browser1.text("#messages li:last-child"), equalTo("Error : player has already joined the game"));
+		assertThat(browser2.query("#messages").children.length, equalTo(2));
+		assertThat(browser1.query("#messages").children.length, equalTo(3));
 		done();
 	}, 100);
 });
@@ -72,8 +77,8 @@ testWith1Browser("Page can display game list when opening game page", function(d
 	
 	setTimeout(function() {
 		browser1.visit(home, function(e, browser2){
-			expect(browser2.text("#gameList #game-1.WAITING")).to.be("Game 1 (WAITING) join game");
-			expect(browser2.query("#gameList #game-1").className).to.contain("WAITING");
+			assertThat(browser2.text("#gameList #game-1.WAITING"), equalTo("Game 1 (WAITING) join game"));
+			assertThat(browser2.query("#gameList #game-1").className, equalTo("WAITING"));
 			done();
 		});
 	}, 50);
@@ -87,10 +92,9 @@ testWith2Browsers("User can join a game", function(done, browser1, browser2) {
 	}, 50);
 
 	setTimeout(function() {
-		expect(browser1.text("#gameList #game-1")).to.be("Game 1 (STARTED) join game");
-		expect(browser1.query("#gameList #game-1").className).to.contain("STARTED");
-		console.log("current", browser1.html("#currentGame"));
-		expect(browser1.query("#currentGame").className).to.contain("STARTED");
+		assertThat(browser1.text("#gameList #game-1"), equalTo("Game 1 (STARTED) join game"));
+		assertThat(browser1.query("#gameList #game-1").className, equalTo("STARTED"));
+		assertThat(browser1.query("#currentGame").className, equalTo("STARTED"));
 		done();
 	}, 100);
 });
