@@ -12,25 +12,27 @@ function Games(){
 	this.init = function() {
 		var location = "ws://" + document.location.host + "/gameMessage";
 		self.ws = new WebSocket(location, "game");
-		self.ws.onmessage = function(message) {
-			jsonMsg = JSON.parse(message.data);
-			if (jsonMsg.userId){
-				self.userId=jsonMsg.userId;
-				$("#userId").html(self.userId);
-			}
-			if (jsonMsg.updatedGame){
-				$("#game-" + jsonMsg.updatedGame.name).remove();
-				$("#gameList").append(self.newGameLine(jsonMsg.updatedGame));
-			}
-			if (jsonMsg.yourTurn){
-				$("#currentGame").addClass("STARTED");
-				$("#messages").append("<li>" + jsonMsg.board + "</li>");
-			}
-			if (jsonMsg.message){
-				$("#messages").append("<li>" + jsonMsg.message + "</li>");
-			}
-			console.log(self.userId + "-messages", $("#messages").html());
-		};
+		self.ws.onmessage = self.receiveMessage;
+	}
+	
+	this.receiveMessage = function(message) {
+		jsonMsg = JSON.parse(message.data);
+		if (jsonMsg.userId){
+			self.userId=jsonMsg.userId;
+			$("#userId").html(self.userId);
+		}
+		if (jsonMsg.updatedGame){
+			$("#game-" + jsonMsg.updatedGame.name).remove();
+			$("#gameList").append(self.newGameLine(jsonMsg.updatedGame));
+		}
+		if (jsonMsg.yourTurn){
+			$("#currentGame").addClass("STARTED");
+			$("#messages").append("<li>" + jsonMsg.board + "</li>");
+		}
+		if (jsonMsg.message){
+			$("#messages").append("<li>" + jsonMsg.message + "</li>");
+		}
+		console.log(self.userId + "-messages", $("#messages").html());
 	}
 
 	this.joinGame = function(gameId) {
@@ -50,3 +52,5 @@ function Games(){
 		});		
 	}
 }
+
+module.exports = Games;
