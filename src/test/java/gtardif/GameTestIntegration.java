@@ -25,6 +25,6 @@ public class GameTestIntegration extends WebTester {
 
 	@Test
 	public void canUseGamePage() {
-		jsTest("src/test/js/testHomePage.js", gameServer.service().getPort());
+		assertTestOK("src/test/js/testHomePage.js", gameServer.service().getPort()).isTrue();
 	}
 }
