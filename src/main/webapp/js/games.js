@@ -16,7 +16,7 @@ function Games(){
 	}
 	
 	this.receiveMessage = function(message) {
-		jsonMsg = JSON.parse(message.data);
+		var jsonMsg = JSON.parse(message.data);
 		if (jsonMsg.userId){
 			self.userId=jsonMsg.userId;
 			$("#userId").html(self.userId);
@@ -27,7 +27,6 @@ function Games(){
 		}
 		if (jsonMsg.yourTurn){
 			$("#currentGame").addClass("STARTED");
-			$("#messages").append("<li>" + jsonMsg.board + "</li>");
 		}
 		if (jsonMsg.message){
 			$("#messages").append("<li>" + jsonMsg.message + "</li>");
