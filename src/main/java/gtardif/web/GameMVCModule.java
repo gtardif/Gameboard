@@ -12,11 +12,11 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 
-public class LimeServletListener extends GuiceServletContextListener {
+public class GameMVCModule extends GuiceServletContextListener {
 	private final GameRepository gameRepository;
 
 	@Inject
-	public LimeServletListener(GameRepository gameRepository) {
+	public GameMVCModule(GameRepository gameRepository) {
 		this.gameRepository = gameRepository;
 	}
 

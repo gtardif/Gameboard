@@ -44,7 +44,7 @@ public class GameWebServer extends AbstractIdleService {
 		webapp.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
 		webapp.addServlet(ChatServlet.class, "/chat");
 		webapp.addServlet(new ServletHolder(injector.getInstance(GameWebSocketServlet.class)), "/gameMessage");
-		webapp.addEventListener(injector.getInstance(LimeServletListener.class));
+		webapp.addEventListener(injector.getInstance(GameMVCModule.class));
 
 		server.setHandler(webapp);
 		server.setStopAtShutdown(true);
