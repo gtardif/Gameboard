@@ -8,16 +8,20 @@ testWithDom = function(testName, html, testFn) {
 	test(testName, function(done) {
 		jsdom.env({
 			html : html,
-			scripts : [ 'http://code.jquery.com/jquery-1.5.min.js' ]
+			scripts : [ './libs/jquery-1.7.1.min.js' ]
 		}, function(err, window) {
-			$=window.jQuery;
-			try {
-				testFn();
-				delete $;
-				done();
-			} catch(error){
-				delete $;
-				done(error);
+			if (err){
+				done(err);
+			}else {
+				$=window.jQuery;
+				try {
+					testFn();
+					delete $;
+					done();
+				} catch(error){
+					delete $;
+					done(error);
+				}
 			}
 		});
 	});
