@@ -34,7 +34,7 @@ class UserWebSocket implements WebSocket.OnTextMessage, GameRepoListener {
 
 	@Override
 	public void onClose(int closeCode, String message) {
-		System.out.println("CLOSING WS " + message);
+		System.out.println("CLOSING WS " + message + " - " + userId);
 		// TODO restore websocket on client side if closed, with info
 		// TODO restore needed info when reloading page
 		gameRepository.removeListener(this);
