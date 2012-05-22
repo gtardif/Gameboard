@@ -37,16 +37,3 @@ testWith1Browser = function(name, scenario) {
 allAsync = function() {
 	//Do nothing on sync callback
 };
-
-testWith2Browsers("User can create game", function(done, browser1, browser2) {
-	browser1.clickLink("Create Game", allAsync);
-
-	setTimeout(function() {
-		assertThat(browser1.text("#gameList #game-1"), equalTo("Game 1 (WAITING) join game"));
-		assertThat(browser1.query("#gameList #game-1").className, equalTo("WAITING"));
-		assertThat(browser2.text("#gameList #game-1"), equalTo("Game 1 (WAITING) join game"));
-		assertThat(browser2.query("#gameList #game-1").className, equalTo("WAITING"));
-
-		done();
-	}, 50);
-});
