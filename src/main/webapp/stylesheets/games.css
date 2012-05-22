@@ -1,0 +1,25 @@
+header { 
+	margin:0px; margin-bottom:3px;
+	text-align:center;
+}
+
+.welcome {
+	margin-right : 30px;
+	float : right;
+}
+
+#main {
+	float:right;
+	width:70%;
+}
+
+aside {
+	margin-right:80%;
+}
+
+aside div{
+	margin-top : 1em;
+	padding:1em;
+	background-color: #E8E8E8 ;
+	border-radius: 15px;
+}

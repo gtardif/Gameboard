@@ -31,7 +31,7 @@ testWith2Browsers("User cannot join its own game", function(done, browser1, brow
 });
 
 testWith1Browser("Page can display game list when opening game page", function(done, browser1) {
-	browser1.clickLink("Create Game", allAsync);
+	browser1.clickLink("New Game", allAsync);
 	
 	setTimeout(function() {
 		browser1.visit(home, function(e, browser2){
@@ -43,7 +43,7 @@ testWith1Browser("Page can display game list when opening game page", function(d
 });
 
 testWith2Browsers("User can join a game", function(done, browser1, browser2) {
-	browser1.clickLink("Create Game", allAsync);
+	browser1.clickLink("New Game", allAsync);
 
 	setTimeout(function() {
 		browser2.clickLink("#gameList #game-1 a", allAsync);

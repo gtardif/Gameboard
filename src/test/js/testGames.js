@@ -24,10 +24,10 @@ msg = function(jsonData){
 testWithDom("can receive UserId", '<div id="userId"><div>', function(){
 	games.receiveMessage(msg({"userId":"toto"}));
 	
-	assertThat($("#userId").html(), equalTo("toto"));
+	assertThat($("#userId").html(), equalTo("Welcome toto"));
 });
 
-testWithDom("can update game list with new game", '<div id="gameList"></div>', function(){
+testWithDom("can update game list with new game", '<ul id="gameList"></ul>', function(){
 	games.receiveMessage(msg({"updatedGame":{
 		"name":"p4", 
 		"status":"WAITING"}
@@ -36,7 +36,7 @@ testWithDom("can update game list with new game", '<div id="gameList"></div>', f
 	assertThat($("#gameList #game-p4").text(), equalTo("Game p4 (WAITING) join game"));
 });
 
-testWithDom("can update game list with updated game", '<div id="gameList"><li id="game-someGame">previous content</li></div>', function(){
+testWithDom("can update game list with updated game", '<ul id="gameList"><li id="game-someGame">previous content</li></ul>', function(){
 	games.receiveMessage(msg({"updatedGame":{
 		"name":"someGame", 
 		"status":"STARTED"}
@@ -45,7 +45,7 @@ testWithDom("can update game list with updated game", '<div id="gameList"><li id
 	assertThat($("#gameList #game-someGame").text(), equalTo("Game someGame (STARTED) join game"));
 });
 
-testWithDom("can display message", '<div id="messages"><li>some previous message</li></div>', function(){
+testWithDom("can display message", '<ul id="messages"><li>some previous message</li></ul>', function(){
 	games.receiveMessage(msg({"message":"hello world"}));
 	
 	assertThat($("#messages").html(), equalTo('<li>some previous message</li><li>hello world</li>'));

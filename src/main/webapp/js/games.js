@@ -19,7 +19,7 @@ function Games(){
 		var jsonMsg = JSON.parse(message.data);
 		if (jsonMsg.userId){
 			self.userId=jsonMsg.userId;
-			$("#userId").html(self.userId);
+			$("#userId").html("Welcome " + self.userId);
 		}
 		if (jsonMsg.updatedGame){
 			$("#game-" + jsonMsg.updatedGame.name).remove();
@@ -44,7 +44,7 @@ function Games(){
 	
 	this.udpateGameList = function(){
 		$.getJSON("/game/list", function(json) {
-			$("#gameList").empty();
+			$("#gameList li").remove();
 			json.forEach(function(game) {
 				$("#gameList").append(self.newGameLine(game));
 			});

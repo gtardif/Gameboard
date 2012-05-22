@@ -1,21 +1,43 @@
+<!DOCTYPE html>
 <html>
 <head>
 <title>Games</title>
+<link href="stylesheets/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="stylesheets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+<!-- Le fav and touch icons -->
+<link rel="shortcut icon" href="../assets/ico/favicon.ico">
+<link rel="stylesheet" href="stylesheets/games.css" />
+</head>
+
+<body>
+	<nav>
+		<div id="userId" class="welcome"></div>
+	</nav>
+	<header>
+		<h1>Game List</h1>
+	</header>
+	<section id="main">
+		<div id="currentGame">Current game</div>
+	</section>
+	<aside>
+		<a href="#" onClick="games.createGame()">New Game</a>
+		<div>
+			Available games : 
+			<ul id="gameList"></ul>
+		</div>
+		<div>
+			Messages
+			<ul id="messages"></ul>
+		</div>
+	</aside>
+</body>
+
 <script src=js/libs/zepto.js></script>
 <script src=js/games.js></script>
-</head>
-<body>
-	Game List
-	
-	<div id="userId"></div>
-	<div id="gameList"></div>
-	<p/>
-	<a href="#" onClick="games.createGame()">Create Game</a>
-	
-	<p/>
-	<div id="messages"></div>
-	<div id="currentGame"></div>
-</body>
 <script>
 	var games;
 	Zepto(function($) {
