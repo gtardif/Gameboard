@@ -27,6 +27,9 @@
 	</header>
 	<section id="main">
 		<div id="currentGame">Current game</div>
+		<canvas id="gameCanvas" width="400" height="300">
+				Your browser does not support HTML Canvas, please upgrade to a more recent browser.
+		</canvas>
 	</section>
 	<aside>
 		<a href="#" onClick="games.createGame()">New Game</a>
@@ -43,6 +46,7 @@
 
 <script src=js/libs/zepto.js></script>
 <script src=js/games.js></script>
+<script src=js/p4.js></script>
 <script>
 	var games;
 	Zepto(function($) {
