@@ -14,13 +14,18 @@ function P4() {
 		self.canvas.fillRect(0, 0, self.width, self.height);
 		self.canvas.fillStyle = 'white';
 
-		for ( var line = 0; line < 6; line++) {
-			for ( var col = 0; col < 7; col++) {
-				var x = col * self.colWidth + self.cellMargin + self.cellRadius;
-				var y = line * self.lineHeight + self.cellMargin + self.cellRadius;
-				self.drawCircle(self.canvas, x, y, self.cellRadius);
+		for ( var raw = 1; raw < 7; raw++) {
+			for ( var col = 1; col < 8; col++) {
+				self.drawPawn(col, raw, 'white');
 			}
 		}
+	};
+
+	this.drawPawn = function(col, raw, color) {
+		self.canvas.fillStyle = color;
+		var x = (col - 1) * self.colWidth + self.cellMargin + self.cellRadius;
+		var y = self.height - (raw - 1) * self.lineHeight - self.cellMargin - self.cellRadius;
+		self.drawCircle(self.canvas, x, y, self.cellRadius);
 	};
 
 	this.drawCircle = function(canvas, x, y, radius) {
