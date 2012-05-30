@@ -36,8 +36,10 @@ function Games() {
 	};
 
 	this.startGame = function() {
-		var p4 = new P4();
-		p4.drawGrid();
+		if (document.getElementById("gameCanvas").getContext) {
+			var p4 = new P4();
+			p4.drawGrid();
+		}
 	};
 
 	this.joinGame = function(gameId) {
