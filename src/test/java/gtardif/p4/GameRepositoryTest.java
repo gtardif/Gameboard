@@ -56,12 +56,21 @@ public class GameRepositoryTest {
 	}
 
 	@Test
-	public void canProcessNotification() {
+	public void canNotifyGameUpdated() {
 		gameRepository.addListener(mockGameRepoListener);
 
 		gameRepository.notifyGameUpdated(mockGame);
 
 		verify(mockGameRepoListener).gameUpdated(mockGame);
+	}
+
+	@Test
+	public void canNotifyGameStarted() {
+		gameRepository.addListener(mockGameRepoListener);
+
+		gameRepository.notifyGameStarted(mockGame);
+
+		verify(mockGameRepoListener).gameStarted(mockGame);
 	}
 
 	@Test

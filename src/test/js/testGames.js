@@ -62,10 +62,10 @@ testWithDom("can display message", '<ul id="messages"><li>some previous message<
 	assertThat($("#messages").html(), equalTo('<li>some previous message</li><li>hello world</li>'));
 });
 
-testWithDom("can update current game when your turn", '<div id="currentGame"></div>', function() {
+testWithDom("can update current game when started", '<div id="currentGame"></div>', function() {
 	games.startGame = mockFunction();
 	games.receiveMessage(msg({
-		"yourTurn" : "true"
+		"startedGame" : "jsonGame"
 	}));
 
 	assertThat($("#currentGame").attr("class"), equalTo('STARTED'));

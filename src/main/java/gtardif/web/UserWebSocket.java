@@ -1,5 +1,6 @@
 package gtardif.web;
 
+import static gtardif.p4.Status.*;
 import gtardif.p4.GameRepoListener;
 import gtardif.p4.GameRepository;
 import gtardif.p4.P4Game;
@@ -54,6 +55,9 @@ class UserWebSocket implements WebSocket.OnTextMessage, GameRepoListener {
 			case join:
 				P4Game game = gameRepository.getGame(tokens.nextToken());
 				game.addPlayer(new WebP4Player("" + userId, this));
+				if (game.getStatus() == STARTED) {
+					gameRepository.notifyGameStarted(game);
+				}
 				gameRepository.notifyGameUpdated(game);
 			}
 		} catch (Exception e) {
@@ -62,8 +66,13 @@ class UserWebSocket implements WebSocket.OnTextMessage, GameRepoListener {
 	}
 
 	@Override
-	public void gameUpdated(P4Game newGame) {
-		sendMessage(WebSocketMessage.gameUpdate(newGame));
+	public void gameUpdated(P4Game game) {
+		sendMessage(WebSocketMessage.gameUpdate(game));
+	}
+
+	@Override
+	public void gameStarted(P4Game game) {
+		sendMessage(WebSocketMessage.gameStarted(game));
 	}
 
 	private String nextGameId() {

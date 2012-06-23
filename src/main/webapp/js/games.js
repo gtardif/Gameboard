@@ -24,7 +24,7 @@ function Games() {
 			$("#game-" + jsonMsg.updatedGame.name).remove();
 			$("#gameList").append(self.newGameLine(jsonMsg.updatedGame));
 		}
-		if (jsonMsg.yourTurn) {
+		if (jsonMsg.startedGame) {
 			$("#currentGame").addClass("STARTED");
 			$("#currentGame").append("STARTED");
 			self.startGame();

@@ -32,9 +32,15 @@ public class GameRepository {
 		listeners.add(listener);
 	}
 
-	public void notifyGameUpdated(P4Game newGame) {
+	public void notifyGameUpdated(P4Game game) {
 		for (GameRepoListener listener : listeners) {
-			listener.gameUpdated(newGame);
+			listener.gameUpdated(game);
+		}
+	}
+
+	public void notifyGameStarted(P4Game game) {
+		for (GameRepoListener listener : listeners) {
+			listener.gameStarted(game);
 		}
 	}
 

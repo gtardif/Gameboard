@@ -28,6 +28,16 @@ public class WebSocketMessage {
 		}
 	}
 
+	private static final class GameStart extends WebSocketMessage {
+		@SuppressWarnings("unused")
+		private final P4Game startedGame;
+
+		private GameStart(String message, P4Game game) {
+			super(message);
+			startedGame = game;
+		}
+	}
+
 	private static final class Error extends WebSocketMessage {
 		@SuppressWarnings("unused")
 		private final boolean success = false;
@@ -35,5 +45,9 @@ public class WebSocketMessage {
 		private Error(String message) {
 			super(message);
 		}
+	}
+
+	public static WebSocketMessage gameStarted(P4Game game) {
+		return new GameStart("Game Started : " + game.getName(), game);
 	}
 }
