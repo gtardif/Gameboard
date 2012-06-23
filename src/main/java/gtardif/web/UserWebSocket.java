@@ -16,6 +16,11 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 class UserWebSocket implements WebSocket.OnTextMessage, GameRepoListener {
+	private static final String USER_ID = "userId";
+	private static final String STARTED_GAME = "startedGame";
+	private static final String UPDATED_GAME = "updatedGame";
+	private static final String SUCCESS = "success";
+	private static final String MESSAGE = "message";
 	private volatile Connection connection;
 	private final int userId;
 	private final GameRepository gameRepository;
@@ -30,7 +35,7 @@ class UserWebSocket implements WebSocket.OnTextMessage, GameRepoListener {
 	public void onOpen(Connection connection) {
 		System.out.println("WS - user " + userId + " logged in");
 		this.connection = connection;
-		this.sendMessageMap(ImmutableMap.of("userId", userId, "message", "User " + userId + " logged in"));
+		this.sendMessage(ImmutableMap.of(USER_ID, userId, MESSAGE, "User " + userId + " logged in"));
 	}
 
 	@Override
@@ -61,37 +66,28 @@ class UserWebSocket implements WebSocket.OnTextMessage, GameRepoListener {
 				gameRepository.notifyGameUpdated(game);
 			}
 		} catch (Exception e) {
-			sendMessage(WebSocketMessage.error(e.getMessage()));
+			sendMessage(ImmutableMap.of(MESSAGE, "Error : " + e.getMessage(), SUCCESS, false));
 		}
 	}
 
 	@Override
 	public void gameUpdated(P4Game game) {
-		sendMessage(WebSocketMessage.gameUpdate(game));
+		sendMessage(ImmutableMap.of(MESSAGE, "Game update :" + game.getName(), UPDATED_GAME, game));
 	}
 
 	@Override
 	public void gameStarted(P4Game game) {
-		sendMessage(WebSocketMessage.gameStarted(game));
+		sendMessage(ImmutableMap.of(MESSAGE, "Game started :" + game.getName(), STARTED_GAME, game));
 	}
 
 	private String nextGameId() {
 		return "" + GameWebSocketServlet.nextGameId.incrementAndGet();
 	}
 
-	private void sendMessage(WebSocketMessage message) {
+	void sendMessage(Map<String, ? extends Object> data) {
 		try {
-			System.out.println("sending to " + userId + " msg : " + new Gson().toJson(message));
-			connection.sendMessage(new Gson().toJson(message));
-		} catch (IOException e) {
-			Throwables.propagate(e);
-		}
-	}
-
-	void sendMessageMap(Map<String, ? extends Object> message) {
-		try {
-			System.out.println("sending to " + userId + " msg : " + new Gson().toJson(message));
-			connection.sendMessage(new Gson().toJson(message));
+			System.out.println("sending to " + userId + " msg : " + new Gson().toJson(data));
+			connection.sendMessage(new Gson().toJson(data));
 		} catch (IOException e) {
 			Throwables.propagate(e);
 		}

@@ -21,7 +21,7 @@ class WebP4Player implements P4Player {
 
 	@Override
 	public void yourTurn(P4Board board) {
-		ws.sendMessageMap(ImmutableMap.of("yourTurn", true, "board", board));
+		ws.sendMessage(ImmutableMap.of("yourTurn", true, "board", board));
 	}
 
 	@Override
