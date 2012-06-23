@@ -28,6 +28,15 @@ function P4() {
 		self.drawCircle(self.canvas, x, y, self.cellRadius);
 	};
 
+	this.animatePawn = function(col, finalRow, color) {
+		self.canvas.globalCompositeOperation = "destination-over"
+		self.canvas.fillStyle = color;
+		self.canvas.fillStyle = color;
+		var x = (col - 1) * self.colWidth + self.cellMargin + self.cellRadius;
+		var y = self.height - (finalRow - 1) * self.lineHeight - 2 * self.cellRadius;
+		self.drawCircle(self.canvas, x, y, self.cellRadius);
+	};
+
 	this.drawCircle = function(canvas, x, y, radius) {
 		canvas.beginPath();
 		canvas.arc(x, y, radius, 0, Math.PI * 2, true);
