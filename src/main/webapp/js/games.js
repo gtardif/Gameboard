@@ -26,7 +26,7 @@ function Games() {
 		}
 		if (jsonMsg.startedGame) {
 			$("#currentGame").addClass("STARTED");
-			$("#currentGame").append("STARTED");
+			$("#currentGame").append(" : " + jsonMsg.startedGame.name);
 			self.startGame();
 		}
 		if (jsonMsg.message) {

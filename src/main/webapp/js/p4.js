@@ -29,7 +29,7 @@ function P4() {
 	};
 
 	this.animatePawn = function(col, finalRow, color) {
-		self.canvas.globalCompositeOperation = "destination-over"
+		self.canvas.globalCompositeOperation = "destination-over";
 		self.canvas.fillStyle = color;
 		self.canvas.fillStyle = color;
 		var x = (col - 1) * self.colWidth + self.cellMargin + self.cellRadius;
